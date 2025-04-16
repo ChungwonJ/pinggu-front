@@ -1,0 +1,56 @@
+@use '/styles/sign.scss' as *;
+@use '/styles/portfolio.scss';
+
+.css-w1u3ce {
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+}
+
+.header {
+  margin-bottom: 20px;
+  border-bottom: 3px solid #333;
+}
+
+.headerGrid {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  padding: 30px;
+  align-items: center;
+  justify-items: center;
+}
+
+.logo {
+  width: 50px;
+
+  &>img {
+    width: 100%;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 80px;
+  justify-content: center;
+
+  &>li {
+    cursor: pointer;
+    font-size: 24px;
+  }
+}
+
+.headerBtn {
+  display: flex;
+  gap: 10px;
+}

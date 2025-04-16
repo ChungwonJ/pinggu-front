@@ -1,0 +1,9 @@
+.portList {
+  display: grid;
+  grid-template-columns: 0fr 1fr 1fr 1fr 1fr;
+  justify-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid #333;
+  padding: 10px;
+  padding-bottom: 30px;
+}

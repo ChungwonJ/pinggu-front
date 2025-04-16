@@ -1,0 +1,59 @@
+.sign{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.signGrid{
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &>h1{
+    margin: 0 auto;
+  }
+}
+
+.signInLogo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signUpForm{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.signInForm{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.signInBtn{
+  display: flex;
+  gap: 10px;
+}
+
+.signInSns{
+  display: flex;
+  gap: 10px;
+  margin: 0 auto;
+}
+
+.error{
+  color: red;
+}
+
+.signInSns > li{
+  width: 50px;
+  cursor: pointer;
+
+  &>img{
+    width: 100%;
+  }
+}
