@@ -1,5 +1,7 @@
 @use '/styles/sign.scss' as *;
 @use '/styles/portfolio.scss';
+@use '/styles/comment.scss';
+@use '/styles/mainpage.scss';
 
 .css-w1u3ce {
   margin: 0;
@@ -53,4 +55,12 @@ a {
 .headerBtn {
   display: flex;
   gap: 10px;
+
+  &>div{
+
+    &>svg{
+      font-size: 40px;
+      cursor: pointer;
+    }
+  }
 }

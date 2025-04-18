@@ -1,9 +1,64 @@
-import React from 'react'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Button, Container, Typography } from '@mui/material';
+import PortfolioList from '@/components/portfoliolist';
+import { useRouter } from 'next/router';
 
-function MainPage() {
+export default function Home() {
+  const router = useRouter();
+  const [portfolios, setPortfolios] = useState([]);
+  const [commentCounts, setCommentCounts] = useState({});
+
+  useEffect(() => {
+    const fetchPortfolios = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const res = await axios.get('/api/portfolios', {
+          headers: { Authorization: accessToken },
+          params: { pageNum: 1, pageSize: 6 },
+        });
+
+        const list = res.data.data;
+        setPortfolios(list);
+
+        const counts = {};
+        await Promise.all(
+          list.map(async (p) => {
+            try {
+              const res = await axios.get(`/api/comments/${p.id}`, {
+                headers: { Authorization: accessToken },
+              });
+              counts[p.id] = res.data.data.length;
+            } catch {
+              counts[p.id] = 0;
+            }
+          })
+        );
+        setCommentCounts(counts);
+      } catch (err) {
+        console.error('메인 포트폴리오 불러오기 실패:', err);
+      }
+    };
+
+    fetchPortfolios();
+  }, []);
+
   return (
-    <div>MainPage</div>
-  )
-}
+    <>
+      <div className='mainPageTop'>
+        <h2>
+          최신 포트폴리오
+        </h2>
+        <Button className='mainPageTopAll' onClick={()=>{router.push('/portfolios')}}>전체보기</Button>
+      </div>
 
-export default MainPage
+      {portfolios.slice(0, 3).map((portfolio) => (
+        <PortfolioList
+          key={portfolio.id}
+          portfolio={portfolio}
+          commentCount={commentCounts[portfolio.id]}
+        />
+      ))}
+    </>
+  );
+}

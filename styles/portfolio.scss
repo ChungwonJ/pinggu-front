@@ -1,9 +1,35 @@
-.portList {
+.portList{
   display: grid;
-  grid-template-columns: 0fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.3fr 1fr 1fr 1fr 1fr;
   justify-items: center;
+  border-bottom: 1px solid #a8a8a8;
   cursor: pointer;
-  border-bottom: 1px solid #333;
-  padding: 10px;
-  padding-bottom: 30px;
+}
+
+.portDetailTilte{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portDetail{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.portDetailSection {
+
+  :nth-child(2) {
+    text-align: center;
+  }
+
+  :nth-child(3) {
+    text-align: end;
+  }
+}
+
+.portDetailTop{
+  display: flex;
+  justify-content: space-between;
 }

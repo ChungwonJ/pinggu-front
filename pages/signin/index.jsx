@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import axiosInstance from '@/utils/axiosInstance'; 
-import { TextField, Button, Typography, Box } from '@mui/material';
+import axios from 'axios';
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 function SignIn() {
   const router = useRouter();
@@ -11,29 +11,19 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
-      const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_AUTH_API_URL}/signin`, { email, password });
-  
-      console.log('응답 전체:', response);
-      console.log('응답 바디:', response.data);
-    
-      const accessToken = response.data.data.accessToken;
-      const refreshToken = response.data.data.refreshToken;
-    
-      console.log('엑세스토큰:', accessToken);
-      console.log('리프레시토큰:', refreshToken);
+      const response = await axios.post('/api/auth/signin', { email, password });
+      const { accessToken } = response.data;
 
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-
-      axiosInstance.defaults.headers['Authorization'] = accessToken;
-      console.log(axiosInstance.defaults.headers['Authorization']);
-  
-      router.push('/mainpage');
+      if (accessToken) {
+        localStorage.setItem('accessToken', accessToken);
+        router.push('/mainpage');
+      } else {
+        console.error('accessToken이 응답에 포함되지 않았습니다.');
+      }
     } catch (error) {
-      const message = error.response?.data?.message || '로그인 중 오류가 발생했습니다.';
-      setErrorMessage(message); 
+      console.error('로그인 오류:', error.response?.data || error.message);
+      setErrorMessage('이메일 또는 비밀번호를 다시 확인해주세요.');
     }
   };
 
@@ -47,32 +37,14 @@ function SignIn() {
     window.location.href = providerUrls[provider];
   };
 
-  useEffect(() => {
-    const { code, provider } = router.query;
-
-    if (code && provider) {
-      const fetchUserData = async () => {
-        try {
-          await axiosInstance.get(`/api/auth/${provider}?code=${code}`);
-          router.push('/portfolio');
-        } catch (error) {
-          console.error(`${provider} 로그인 실패`, error);
-          setErrorMessage(`${provider} 로그인 실패`);
-        }
-      };
-
-      fetchUserData();
-    }
-  }, [router.query]);
-
   return (
-    <div className='sign'>
-      <div className='signGrid'>
+    <div className="sign">
+      <div className="signGrid">
         <h1>PortForU</h1>
-        <div className='signInLogo'>
+        <div className="signInLogo">
           <img src="./portforu.png" alt="logo" />
         </div>
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', maxWidth: 400, margin: '0 auto' }}>
           <TextField
             label="이메일"
             variant="outlined"
@@ -93,7 +65,7 @@ function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
           />
           {errorMessage && <Typography color="error">{errorMessage}</Typography>}
-          <div className='signInBtn'>
+          <div className="signInBtn" style={{ marginTop: '16px' }}>
             <Button type="submit" variant="contained" fullWidth>
               로그인
             </Button>
@@ -102,7 +74,7 @@ function SignIn() {
             </Button>
           </div>
         </Box>
-        <ul className='signInSns'>
+        <ul className="signInSns" style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
           <li onClick={() => handleSnsLogin('kakao')}>
             <img src="./kakao.png" alt="카카오 로그인" />
           </li>
@@ -119,4 +91,3 @@ function SignIn() {
 }
 
 export default SignIn;
-
