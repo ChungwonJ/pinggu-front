@@ -6,7 +6,7 @@ import SearchModal from '@/components/modal';
 
 function Header() {
   const router = useRouter();
-  const [openSearch, setOpenSearch] = useState(false); 
+  const [openSearch, setOpenSearch] = useState(false);
 
   const handleSearch = (keyword) => {
     console.log('검색어:', keyword);
@@ -24,7 +24,7 @@ function Header() {
         <div>
           <ul className='nav'>
             <li onClick={() => { router.push('/portfolios') }}>포트</li>
-            <li>채용공고</li>
+            <li onClick={() => { router.push('/jobposting') }}>채용공고</li>
             <li onClick={() => { router.push('/portfolios/write') }}>등록하기</li>
           </ul>
         </div>
@@ -33,7 +33,7 @@ function Header() {
           <div onClick={() => { setOpenSearch(true) }}>
             <SearchIcon />
           </div>
-          <div>
+          <div onClick={() => { router.push('/mypage') }}>
             <AccountCircleIcon />
           </div>
         </div>

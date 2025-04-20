@@ -2,6 +2,8 @@
 @use '/styles/portfolio.scss';
 @use '/styles/comment.scss';
 @use '/styles/mainpage.scss';
+@use '/styles/mypage.scss';
+@use '/styles/members.scss';
 
 .css-w1u3ce {
   margin: 0;
@@ -13,11 +15,6 @@ li {
 
 a {
   text-decoration: none;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
 }
 
 .header {
