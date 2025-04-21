@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
   const { id } = req.query;
-  const token = req.headers.authorization; // 클라이언트에서 보낸 accessToken
-
+  const token = req.headers.authorization; 
   const endpoint = `${process.env.NEXT_PUBLIC_MEMBER_API_URL}/${id}`;
 
   if (['GET', 'PUT', 'DELETE'].includes(req.method)) {
@@ -10,7 +9,7 @@ export default async function handler(req, res) {
         method: req.method,
         headers: {
           'Content-Type': 'application/json',
-          ...(token && { Authorization: token }), // 토큰이 있을 때만 포함
+          ...(token && { Authorization: token }), 
         },
         body:
           req.method === 'PUT' || req.method === 'DELETE'

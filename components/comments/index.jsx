@@ -25,8 +25,7 @@ export default function Comments({ portfolioId }) {
   const indexOfFirst = indexOfLast - commentsPerPage;
   const currentComments = comments.slice(indexOfFirst, indexOfLast);
 
-  const accessToken =
-    typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+  const accessToken = localStorage.getItem('accessToken');
 
   const fetchComments = async () => {
     try {
