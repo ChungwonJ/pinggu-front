@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   const { id } = req.query;
   const token = req.headers.authorization; 
-  const endpoint = `${process.env.NEXT_PUBLIC_MEMBER_API_URL}/${id}`;
+  const endpoint = `${process.env.NEXT_PUBLIC_MEMBER_API_URL}`;
 
   if (['GET', 'PUT', 'DELETE'].includes(req.method)) {
     try {

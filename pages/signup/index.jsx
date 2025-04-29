@@ -11,7 +11,7 @@ function SignUp() {
       const response = await axios.post('/api/auth/signup', formData);
       console.log('회원가입 성공:', response.data);
       alert('회원가입에 성공하였습니다');
-      router.push('/mainpage');
+      router.push('/signin');
     } catch (error) {
       if (error.response?.data?.message) {
         alert(error.response.data.message);

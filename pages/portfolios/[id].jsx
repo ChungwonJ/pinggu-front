@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import JobPostingList from '@/components/jobpostinglist'; 
 
 const Comments = dynamic(() => import('@/components/comments'), { ssr: false });
 
@@ -11,6 +12,7 @@ export default function PortfolioDetail() {
   const { id } = router.query;
 
   const [portfolio, setPortfolio] = useState(null);
+  const [jobPostings, setJobPostings] = useState([]); 
 
   useEffect(() => {
     if (!router.isReady || !id) return;
@@ -33,6 +35,48 @@ export default function PortfolioDetail() {
 
     fetchPortfolio();
   }, [router.isReady, id]);
+
+  useEffect(() => {
+    if (portfolio?.title) {
+      fetchJobPostings(portfolio.title);
+    }
+  }, [portfolio]);
+
+  const fetchJobPostings = async (keyword) => {
+    try {
+      const res = await fetch('/api/jobpostings/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: {
+            multi_match: {
+              query: keyword,
+              type: 'phrase_prefix',
+              fields: [
+                "title",
+                "company",
+                "location",
+                "salary",
+                "duty",
+                "employmentType",
+                "experienceYears",
+                "skills",
+                "keyAbilities"
+              ]
+            }
+          }
+        }),
+      });
+
+      const data = await res.json();
+      const hits = data.hits.hits.map(hit => hit._source);
+      setJobPostings(hits);
+    } catch (err) {
+      console.error('잡포스팅 검색 실패:', err);
+    }
+  };
 
   const handleEdit = () => {
     router.push(`/portfolios/edit/${id}`);
@@ -77,7 +121,7 @@ export default function PortfolioDetail() {
                 첨부파일: {
                   (() => {
                     const filename = decodeURIComponent(portfolio.fileUrl.split('/').pop());
-                    const [name, ext] = filename.split(/\.(?=[^\.]+$)/); // 확장자 분리
+                    const [name, ext] = filename.split(/\.(?=[^\.]+$)/);
                     const shortName = name.length > 6 ? name.slice(0, 6) + '...' : name;
                     return `${shortName}.${ext}`;
                   })()
@@ -103,8 +147,8 @@ export default function PortfolioDetail() {
               </Link>
             </>
           )}
-          <Button onClick={() => { handleEdit() }} >수정</Button>
-          <Button onClick={() => { handleDelete() }} >삭제</Button>
+          <Button onClick={handleEdit}>수정</Button>
+          <Button onClick={handleDelete}>삭제</Button>
         </div>
       </div>
 
@@ -122,9 +166,17 @@ export default function PortfolioDetail() {
         </div>
 
         <div className='portDetailRight'>
-          채용공고자리
+          <h3>관련 채용공고</h3>
+          {jobPostings.length === 0 ? (
+            <p>관련 채용공고가 없습니다.</p>
+          ) : (
+            jobPostings.map((posting, index) => (
+              <JobPostingList key={index} jobPosting={posting} />
+            ))
+          )}
         </div>
       </div>
     </>
   );
 }
+

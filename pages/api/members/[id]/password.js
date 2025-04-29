@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_MEMBER_API_URL}/${id}/password`,
+      `${process.env.NEXT_PUBLIC_MEMBER_API_URL}/password`,
       {
         method: 'PUT',
         headers: {
