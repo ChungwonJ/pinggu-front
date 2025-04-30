@@ -46,7 +46,7 @@ export default function MyPage() {
       </Button>
 
       {userRole === 'ROLE_USER' && (
-        <Button variant="contained" onClick={() => router.push('/subscribe')}>
+        <Button variant="contained" onClick={() => router.push('/memberships')}>
           구독하기
         </Button>
       )}

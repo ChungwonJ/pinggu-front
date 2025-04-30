@@ -21,7 +21,7 @@ export default function JobPostingsSearchPage() {
         query: {
           multi_match: {
             query: searchTerm,
-            type: 'phrase_prefix',
+            type: 'bool_prefix',
             fields: [
               "title",
               "company",

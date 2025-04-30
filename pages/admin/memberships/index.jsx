@@ -51,7 +51,7 @@ export default function Membership() {
         },
       });
       const data = await res.json();
-      console.log('멤버십 데이터:', data); // 추가!!
+      console.log('멤버십 데이터:', data); 
       setMemberships(data.data || []);
     } catch (err) {
       console.error('불러오기 실패:', err);
