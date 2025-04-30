@@ -53,7 +53,8 @@ export default function PortfolioDetail() {
           query: {
             multi_match: {
               query: keyword,
-              type: 'phrase_prefix',
+              type: 'best_fields',
+              operator: 'OR',
               fields: [
                 "title",
                 "company",
