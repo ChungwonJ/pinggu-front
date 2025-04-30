@@ -18,7 +18,7 @@ export default function EditPortfolioPage() {
   const [originalFileUrl, setOriginalFileUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // 🔄 기존 데이터 불러오기
+  // 기존 데이터 불러오기
   useEffect(() => {
     if (!router.isReady || !id) return;
 
@@ -43,7 +43,7 @@ export default function EditPortfolioPage() {
     fetchPortfolio();
   }, [router.isReady, id]);
 
-  // ✅ S3에 새 파일 업로드
+  // S3에 새 파일 업로드
   const uploadFileToS3 = async (file, accessToken) => {
     const formData = new FormData();
     formData.append('portfolioFile', file);
