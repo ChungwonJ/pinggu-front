@@ -1,9 +1,8 @@
 import { Button } from '@mui/material';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import JobPostingList from '@/components/jobpostinglist'; 
+import JobPostingList from '@/components/jobpostinglist';
 
 const Comments = dynamic(() => import('@/components/comments'), { ssr: false });
 
@@ -12,7 +11,7 @@ export default function PortfolioDetail() {
   const { id } = router.query;
 
   const [portfolio, setPortfolio] = useState(null);
-  const [jobPostings, setJobPostings] = useState([]); 
+  const [jobPostings, setJobPostings] = useState([]);
 
   useEffect(() => {
     if (!router.isReady || !id) return;
@@ -109,6 +108,32 @@ export default function PortfolioDetail() {
     }
   };
 
+  // 내부에 handleDownload 개선
+  const handleDownload = async () => {
+    try {
+      const res = await fetch(`/api/portfolios/download?url=${encodeURIComponent(portfolio.fileUrl)}`);
+      if (!res.ok) throw new Error('다운로드 실패');
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+
+      const fileName = decodeURIComponent(portfolio.fileUrl.split('/').pop());
+      link.download = fileName;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('다운로드 오류:', err);
+      alert('파일 다운로드에 실패했습니다.');
+    }
+  };
+
+
   if (!portfolio) return <p>로딩 중...</p>;
 
   return (
@@ -128,24 +153,18 @@ export default function PortfolioDetail() {
                   })()
                 }
               </span>
-              <Link
-                href={portfolio.fileUrl}
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-block',
-                  padding: '0.5rem 1rem',
+              <Button
+                onClick={handleDownload}
+                sx={{
+                  marginLeft: '1rem',
                   backgroundColor: '#0070f3',
                   color: 'white',
-                  textDecoration: 'none',
-                  borderRadius: '4px',
-                  marginRight: '1rem',
-                  marginLeft: '1rem'
+                  textTransform: 'none',
+                  '&:hover': { backgroundColor: '#0059c1' },
                 }}
               >
                 파일 다운로드
-              </Link>
+              </Button>
             </>
           )}
           <Button onClick={handleEdit}>수정</Button>
@@ -180,4 +199,3 @@ export default function PortfolioDetail() {
     </>
   );
 }
-

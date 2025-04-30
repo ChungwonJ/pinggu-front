@@ -1,3 +1,9 @@
+export const config = {
+  api: {
+    bodyParser: false, // ✅ body를 직접 읽기 위해 비활성화
+  },
+};
+
 export default async function handler(req, res) {
   const {
     method,
@@ -23,12 +29,20 @@ export default async function handler(req, res) {
       }
 
       case 'PUT': {
+        // ✅ req.body 직접 읽기 (stream으로)
+        const chunks = [];
+        for await (const chunk of req) {
+          chunks.push(chunk);
+        }
+        const rawBody = Buffer.concat(chunks).toString(); // JSON 문자열
+
         const backendRes = await fetch(`${BACKEND_URL}/${id}`, {
           method: 'PUT',
           headers: {
+            'Content-Type': 'application/json', 
             Authorization: token,
           },
-          body: req.body instanceof FormData ? req.body : JSON.stringify(req.body),
+          body: rawBody, 
         });
 
         const data = await backendRes.json();
