@@ -2,10 +2,10 @@ import Header from "./layoutcomponents/Header";
 
 
 
-export default function Layout({ children }) {
+export default function Layout({ children, toggleTheme }) {
   return (
     <>
-      <Header />
+      <Header toggleTheme={toggleTheme} />
       {children}
     </>
   );

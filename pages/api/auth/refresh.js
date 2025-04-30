@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const backendResponse = await fetch('http://localhost:8080/api/v1/auth/refresh', {
+    const backendResponse = await fetch(process.env.NEXT_PUBLIC_AUTH_REFRESH_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,5 +37,5 @@ function getBearerTokenFromCookie(cookieHeader) {
     acc[key] = value;
     return acc;
   }, {});
-  return `Bearer ${cookies.refreshToken}`;
+  return `${cookies.refreshToken}`;
 }

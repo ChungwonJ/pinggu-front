@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Switch } from '@mui/material';
 
-function Header() {
+function Header({ toggleTheme }) {
   const router = useRouter();
 
   return (
@@ -21,13 +22,14 @@ function Header() {
           </ul>
         </div>
 
-        <div className='headerBtn'>
+        <div className='headerBtn' style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div onClick={() => { router.push('/jobpostings/search') }}>
             <SearchIcon />
           </div>
           <div onClick={() => { router.push('/mypage') }}>
             <AccountCircleIcon />
           </div>
+          <Switch onChange={toggleTheme} />
         </div>
       </div>
     </div>

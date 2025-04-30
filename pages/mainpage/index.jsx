@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '@/lib/axios';
 import { Button, Container, Typography } from '@mui/material';
 import PortfolioList from '@/components/portfoliolist';
 import JobPostingList from '@/components/jobpostinglist'; 

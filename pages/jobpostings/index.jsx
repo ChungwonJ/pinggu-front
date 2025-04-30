@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '@/lib/axios';
 import { Container, Typography, Pagination, Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import JobPostingList from '@/components/jobpostinglist';
