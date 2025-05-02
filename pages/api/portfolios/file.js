@@ -19,6 +19,14 @@ const parseForm = (req) =>
   });
 
 export default async function handler(req, res) {
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', 'https://pinggu.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -28,12 +36,11 @@ export default async function handler(req, res) {
 
   try {
     const { files } = await parseForm(req);
-
     const fileField = files.portfolioFile;
     const file = Array.isArray(fileField) ? fileField[0] : fileField;
 
     if (!file || !file.filepath) {
-      console.error(' 파일이 비었거나 경로 없음:', file);
+      console.error('파일이 비었거나 경로 없음:', file);
       return res.status(400).json({ message: '파일이 첨부되지 않았습니다.' });
     }
 
@@ -48,6 +55,9 @@ export default async function handler(req, res) {
         ...formData.getHeaders(),
       },
     });
+
+    res.setHeader('Access-Control-Allow-Origin', 'https://pinggu.vercel.app');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     console.log('백엔드 응답:', response.data);
     return res.status(response.status).json(response.data);
