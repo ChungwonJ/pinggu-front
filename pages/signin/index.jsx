@@ -29,14 +29,14 @@ function SignIn() {
 
   const handleSnsLogin = (provider) => {
     const providerUrls = {
-      kakao: `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`,
-      google: `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`,
-      naver: `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI}&state=randomString`,
+      kakao: process.env.NEXT_PUBLIC_KAKAO_AUTH_URL,
+      naver: process.env.NEXT_PUBLIC_NAVER_AUTH_URL,
+      google: process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL,
     };
-
+  
     window.location.href = providerUrls[provider];
   };
-
+  
   return (
     <div className="sign">
       <div className="signGrid">
