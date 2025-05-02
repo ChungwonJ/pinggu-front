@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useEffect, useMemo, useState } from 'react';
+import Script from 'next/script'; // ✅ 스크립트 로드를 위해 추가
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -38,15 +39,22 @@ export default function App({ Component, pageProps }) {
   }), [mode]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {!isAuthPage ? (
-        <Layout toggleTheme={toggleTheme}>
+    <>
+      <Script
+        src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+        strategy="beforeInteractive"
+      />
+
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {!isAuthPage ? (
+          <Layout toggleTheme={toggleTheme}>
+            <Component {...pageProps} toggleTheme={toggleTheme} />
+          </Layout>
+        ) : (
           <Component {...pageProps} toggleTheme={toggleTheme} />
-        </Layout>
-      ) : (
-        <Component {...pageProps} toggleTheme={toggleTheme} />
-      )}
-    </ThemeProvider>
+        )}
+      </ThemeProvider>
+    </>
   );
 }
