@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useEffect, useMemo, useState } from 'react';
-import Script from 'next/script'; // ✅ 스크립트 로드를 위해 추가
+import Script from 'next/script'; //  스크립트 로드를 위해 추가
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();

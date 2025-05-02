@@ -1,6 +1,6 @@
 export const config = {
   api: {
-    bodyParser: false, // ✅ body를 직접 읽기 위해 비활성화
+    bodyParser: false, // body를 직접 읽기 위해 비활성화
   },
 };
 
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       }
 
       case 'PUT': {
-        // ✅ req.body 직접 읽기 (stream으로)
+        // req.body 직접 읽기 (stream으로)
         const chunks = [];
         for await (const chunk of req) {
           chunks.push(chunk);
