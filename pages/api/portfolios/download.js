@@ -14,8 +14,6 @@ export default async function handler(req, res) {
 
     const response = await fetch(decodedUrl);
 
-    console.error('응답 상태코드:', response.status);
-
     if (!response.ok) {
       const errorText = await response.text();
       console.error('S3 응답 실패:', errorText);
@@ -26,6 +24,11 @@ export default async function handler(req, res) {
     const fileName = decodeURIComponent(url.split('/').pop());
     const arrayBuffer = await response.arrayBuffer();
 
+    res.setHeader('Access-Control-Allow-Origin', 'https://pinggu.vercel.app');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`);
     res.send(Buffer.from(arrayBuffer));
@@ -34,3 +37,11 @@ export default async function handler(req, res) {
     res.status(500).send('파일 다운로드 중 오류가 발생했습니다.');
   }
 }
+
+// 만약 OPTIONS 프리플라이트 요청 처리 필요 시
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+

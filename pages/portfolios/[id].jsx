@@ -111,7 +111,7 @@ export default function PortfolioDetail() {
   // 내부에 handleDownload 개선
   const handleDownload = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/portfolios/download?url=${encodeURIComponent(portfolio.fileUrl)}`);
+      const res = await fetch(`/api/portfolios/download?url=${encodeURIComponent(portfolio.fileUrl)}`);
       if (!res.ok) throw new Error('다운로드 실패');
 
       const blob = await res.blob();
