@@ -10,11 +10,11 @@ export default async function handler(req, res) {
 
   try {
     const decodedUrl = decodeURIComponent(url);
-    console.error('📦 다운로드 요청 URL:', decodedUrl);
+    console.error('다운로드 요청 URL:', decodedUrl);
 
     const response = await fetch(decodedUrl);
 
-    console.error('📡 응답 상태코드:', response.status);
+    console.error('응답 상태코드:', response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
