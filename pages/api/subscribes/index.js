@@ -10,7 +10,7 @@ export default async function handler(req, res) {
           'Content-Type': 'application/json',
           ...(token && { Authorization: token }),
         },
-      });
+      });  
 
       const data = await response.json();
 
