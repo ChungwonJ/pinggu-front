@@ -79,14 +79,9 @@ export default function MembershipDetail() {
         orderId,
         orderName: membership.name,
         customerName: getCustomerNameFromToken(),
-        successUrl: `http://localhost:3000/payments/success?orderId=${orderId}`,
-        failUrl: `http://localhost:3000/payments/fail?subscribeId=${subscribeId}`,
+        successUrl: `${NEXT_PUBLIC_TOSS_SUCCESS_URL}?orderId=${orderId}`,
+        failUrl: `${NEXT_PUBLIC_TOSS_FAIL_URL}?subscribeId=${subscribeId}`,
       });
-
-      console.log('orderId:', orderId);
-      console.log('amount:', amount);
-      console.log('orderName:', membership?.name);
-      console.log('customerName:', getCustomerNameFromToken());
 
     } catch (err) {
       console.error('구독 생성 실패:', err);
