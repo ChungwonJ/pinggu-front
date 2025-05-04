@@ -40,7 +40,6 @@ export default function MembershipDetail() {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) return '알 수 없음';
-
       const decoded = jwtDecode(token);
       return decoded.name || '알 수 없음';
     } catch (e) {
@@ -68,10 +67,9 @@ export default function MembershipDetail() {
 
       const result = await res.json();
       const subscribeId = result.data?.id;
-      const orderId = `${subscribeId}`;
-      const amount = membership.price; 
-      console.log('구독 ID 확인:', subscribeId); 
-      // Toss 결제 SDK 바로 실행
+      const orderId = `order_${subscribeId}`; 
+      const amount = membership.price;
+
       const tossPayments = window.TossPayments(process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY);
 
       tossPayments.requestPayment('카드', {
@@ -80,7 +78,7 @@ export default function MembershipDetail() {
         orderName: membership.name,
         customerName: getCustomerNameFromToken(),
         successUrl: `${process.env.NEXT_PUBLIC_TOSS_SUCCESS_URL}?orderId=${orderId}`,
-        failUrl: `${process.env.NEXT_PUBLIC_TOSS_FAIL_URL}?subscribeId=${subscribeId}`,
+        failUrl: `${process.env.NEXT_PUBLIC_TOSS_FAIL_URL}?orderId=${orderId}`,
       });
 
     } catch (err) {
@@ -88,7 +86,6 @@ export default function MembershipDetail() {
       alert(err.message);
     }
   };
-
 
   if (loading) {
     return (
@@ -131,4 +128,3 @@ export default function MembershipDetail() {
     </>
   );
 }
-
