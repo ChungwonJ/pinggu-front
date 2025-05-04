@@ -79,8 +79,8 @@ export default function MembershipDetail() {
         orderId,
         orderName: membership.name,
         customerName: getCustomerNameFromToken(),
-        successUrl: `${NEXT_PUBLIC_TOSS_SUCCESS_URL}?orderId=${orderId}`,
-        failUrl: `${NEXT_PUBLIC_TOSS_FAIL_URL}?subscribeId=${subscribeId}`,
+        successUrl: `${process.env.NEXT_PUBLIC_TOSS_SUCCESS_URL}?orderId=${orderId}`,
+        failUrl: `${process.env.NEXT_PUBLIC_TOSS_FAIL_URL}?subscribeId=${subscribeId}`,
       });
 
     } catch (err) {
