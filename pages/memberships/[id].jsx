@@ -83,6 +83,11 @@ export default function MembershipDetail() {
         failUrl: `http://localhost:3000/payments/fail?subscribeId=${subscribeId}`,
       });
 
+      console.log('orderId:', orderId);
+      console.log('amount:', amount);
+      console.log('orderName:', membership?.name);
+      console.log('customerName:', getCustomerNameFromToken());
+
     } catch (err) {
       console.error('구독 생성 실패:', err);
       alert(err.message);
