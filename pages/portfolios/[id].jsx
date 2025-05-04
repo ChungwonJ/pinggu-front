@@ -13,15 +13,16 @@ export default function PortfolioDetail() {
   const [portfolio, setPortfolio] = useState(null);
   const [jobPostings, setJobPostings] = useState([]);
 
+  // 포트폴리오 불러오기
   useEffect(() => {
     if (!router.isReady || !id) return;
 
     const fetchPortfolio = async () => {
       try {
-        const accessToken = localStorage.getItem('accessToken');
+        const token = localStorage.getItem('accessToken');
         const res = await fetch(`/api/portfolios/${id}`, {
           headers: {
-            Authorization: accessToken,
+            Authorization: token, 
           },
         });
 
@@ -35,17 +36,26 @@ export default function PortfolioDetail() {
     fetchPortfolio();
   }, [router.isReady, id]);
 
+  // 포트폴리오 제목으로 자동 검색
   useEffect(() => {
     if (portfolio?.title) {
       fetchJobPostings(portfolio.title);
     }
   }, [portfolio]);
 
+  // 잡포스팅 검색 API 호출
   const fetchJobPostings = async (keyword) => {
     try {
-      const res = await fetch(`/api/jobpostings/search?keyword=${encodeURIComponent(keyword)}`);
+      const token = localStorage.getItem('accessToken');
+      const res = await fetch(`/api/jobpostings/search?keyword=${encodeURIComponent(keyword)}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token, 
+        },
+      });
+
       const data = await res.json();
-      setJobPostings(data.data || []); 
+      setJobPostings(data.data || []);
     } catch (err) {
       console.error('잡포스팅 검색 실패:', err);
     }
@@ -60,11 +70,11 @@ export default function PortfolioDetail() {
     if (!confirmed) return;
 
     try {
-      const accessToken = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/portfolios/${id}`, {
         method: 'DELETE',
         headers: {
-          Authorization: accessToken,
+          Authorization: token,
         },
       });
 
@@ -81,7 +91,6 @@ export default function PortfolioDetail() {
     }
   };
 
-  // 내부에 handleDownload 개선
   const handleDownload = async () => {
     try {
       const res = await fetch(`/api/portfolios/download?url=${encodeURIComponent(portfolio.fileUrl)}`);
@@ -105,7 +114,6 @@ export default function PortfolioDetail() {
       alert('파일 다운로드에 실패했습니다.');
     }
   };
-
 
   if (!portfolio) return <p>로딩 중...</p>;
 
