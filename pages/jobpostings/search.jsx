@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import JobPostingList from '@/components/jobpostinglist';
@@ -16,8 +16,13 @@ export default function JobPostingsSearchPage() {
 
     try {
       setLoading(true);
+      const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+
       const res = await axios.get('/api/jobpostings/search', {
-        params: { keyword: searchTerm, page: 0, size: 10 }
+        params: { keyword: searchTerm, page: 0, size: 10 },
+        headers: {
+          Authorization: `${token}`,
+        },
       });
 
       const hits = res.data.data || [];
