@@ -68,9 +68,9 @@ export default function MembershipDetail() {
 
       const result = await res.json();
       const subscribeId = result.data?.id;
-      const orderId = `order_${subscribeId}`;
+      const orderId = `${subscribeId}`;
       const amount = membership.price; 
-
+      console.log('구독 ID 확인:', subscribeId); 
       // Toss 결제 SDK 바로 실행
       const tossPayments = window.TossPayments(process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY);
 
