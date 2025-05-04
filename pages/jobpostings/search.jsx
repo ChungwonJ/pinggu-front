@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import axios from '@/lib/axios';
+import axios from 'axios';
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import JobPostingList from '@/components/jobpostinglist'; 
+import JobPostingList from '@/components/jobpostinglist';
 
 export default function JobPostingsSearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,33 +16,15 @@ export default function JobPostingsSearchPage() {
 
     try {
       setLoading(true);
-
-      const res = await axios.post('/api/jobpostings/search', {
-        query: {
-          multi_match: {
-            query: searchTerm,
-            type: 'bool_prefix',
-            fields: [
-              "title",
-              "company",
-              "location",
-              "salary",
-              "duty",
-              "employmentType",
-              "experienceYears",
-              "skills",
-              "keyAbilities"
-            ]
-          }
-        }
+      const res = await axios.get('/api/jobpostings/search', {
+        params: { keyword: searchTerm, page: 0, size: 10 }
       });
-      
 
-      const hits = res.data.hits.hits.map(hit => hit._source);
-
+      const hits = res.data.data || [];
       setJobPostings(hits);
     } catch (err) {
       console.error('검색 실패:', err);
+      alert('검색 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
@@ -50,9 +32,7 @@ export default function JobPostingsSearchPage() {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        잡포스팅 검색
-      </Typography>
+      <Typography variant="h4" gutterBottom>잡포스팅 검색</Typography>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
         <TextField
@@ -61,11 +41,7 @@ export default function JobPostingsSearchPage() {
           label="검색어를 입력하세요"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSearch();
-            }
-          }}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         />
         <Button variant="contained" onClick={handleSearch}>
           검색
@@ -75,18 +51,13 @@ export default function JobPostingsSearchPage() {
       {loading ? (
         <Typography>로딩 중...</Typography>
       ) : (
-        <>
-          {jobPostings.length === 0 ? (
-            <Typography>검색 결과가 없습니다.</Typography>
-          ) : (
-            jobPostings.map((posting, index) => (
-              <JobPostingList
-                key={index}
-                jobPosting={posting}
-              />
-            ))
-          )}
-        </>
+        jobPostings.length === 0 ? (
+          <Typography>검색 결과가 없습니다.</Typography>
+        ) : (
+          jobPostings.map((posting, index) => (
+            <JobPostingList key={index} jobPosting={posting} />
+          ))
+        )
       )}
     </Container>
   );

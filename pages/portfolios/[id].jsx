@@ -43,36 +43,9 @@ export default function PortfolioDetail() {
 
   const fetchJobPostings = async (keyword) => {
     try {
-      const res = await fetch('/api/jobpostings/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: {
-            multi_match: {
-              query: keyword,
-              type: 'best_fields',
-              operator: 'OR',
-              fields: [
-                "title",
-                "company",
-                "location",
-                "salary",
-                "duty",
-                "employmentType",
-                "experienceYears",
-                "skills",
-                "keyAbilities"
-              ]
-            }
-          }
-        }),
-      });
-
+      const res = await fetch(`/api/jobpostings/search?keyword=${encodeURIComponent(keyword)}`);
       const data = await res.json();
-      const hits = data.hits.hits.map(hit => hit._source);
-      setJobPostings(hits);
+      setJobPostings(data.data || []); 
     } catch (err) {
       console.error('잡포스팅 검색 실패:', err);
     }
