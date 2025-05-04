@@ -79,8 +79,8 @@ export default function MembershipDetail() {
         orderId,
         orderName: membership.name,
         customerName: getCustomerNameFromToken(),
-        successUrl: `/payments/success?orderId=${orderId}`, 
-        failUrl: `/payments/fail?subscribeId=${subscribeId}`,
+        successUrl: `${window.location.origin}/payments/success?orderId=${orderId}`,
+        failUrl: `${window.location.origin}/payments/fail?subscribeId=${subscribeId}`,
       });
 
     } catch (err) {
