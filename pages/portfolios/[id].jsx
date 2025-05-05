@@ -21,9 +21,7 @@ export default function PortfolioDetail() {
       try {
         const token = localStorage.getItem('accessToken');
         const res = await fetch(`/api/portfolios/${id}`, {
-          headers: {
-            Authorization: token, 
-          },
+          headers: { Authorization: token },
         });
 
         const data = await res.json();
@@ -36,21 +34,18 @@ export default function PortfolioDetail() {
     fetchPortfolio();
   }, [router.isReady, id]);
 
-  // 포트폴리오 제목으로 자동 검색
+  // 포트폴리오 제목으로 잡포스팅 검색
   useEffect(() => {
-    if (portfolio?.title) {
-      fetchJobPostings(portfolio.title);
-    }
+    if (portfolio?.title) fetchJobPostings(portfolio.title);
   }, [portfolio]);
 
-  // 잡포스팅 검색 API 호출
   const fetchJobPostings = async (keyword) => {
     try {
       const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/jobpostings/search?keyword=${encodeURIComponent(keyword)}`, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: token, 
+          Authorization: token,
         },
       });
 
@@ -61,9 +56,7 @@ export default function PortfolioDetail() {
     }
   };
 
-  const handleEdit = () => {
-    router.push(`/portfolios/edit/${id}`);
-  };
+  const handleEdit = () => router.push(`/portfolios/edit/${id}`);
 
   const handleDelete = async () => {
     const confirmed = confirm('정말 삭제하시겠습니까?');
@@ -73,9 +66,7 @@ export default function PortfolioDetail() {
       const token = localStorage.getItem('accessToken');
       const res = await fetch(`/api/portfolios/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: token,
-        },
+        headers: { Authorization: token },
       });
 
       if (res.ok) {
@@ -97,12 +88,23 @@ export default function PortfolioDetail() {
       if (!res.ok) throw new Error('다운로드 실패');
 
       const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
+      const contentType = res.headers.get('Content-Type') || 'application/octet-stream';
+      const disposition = res.headers.get('Content-Disposition');
+
+      let fileName = decodeURIComponent(portfolio.fileUrl.split('/').pop());
+
+      if (disposition && disposition.includes('filename=')) {
+        const match = disposition.match(/filename="?(.+?)"?$/);
+        if (match && match[1]) {
+          fileName = decodeURIComponent(match[1]);
+        }
+      }
+
+      const blobWithType = new Blob([blob], { type: contentType });
+      const url = window.URL.createObjectURL(blobWithType);
 
       const link = document.createElement('a');
       link.href = url;
-
-      const fileName = decodeURIComponent(portfolio.fileUrl.split('/').pop());
       link.download = fileName;
 
       document.body.appendChild(link);
@@ -119,7 +121,7 @@ export default function PortfolioDetail() {
 
   return (
     <>
-      <div className='portDetailTilte'>
+      <div className="portDetailTilte">
         <h2>포트폴리오 상세</h2>
         <div>
           {portfolio.fileUrl && (
@@ -153,10 +155,10 @@ export default function PortfolioDetail() {
         </div>
       </div>
 
-      <div className='portDetail'>
-        <div className='portDetailLeft'>
-          <div className='portDetailSection'>
-            <div className='portDetailTop'>
+      <div className="portDetail">
+        <div className="portDetailLeft">
+          <div className="portDetailSection">
+            <div className="portDetailTop">
               <p><strong>제목:</strong> {portfolio.title}</p>
               <p><strong>조회수:</strong> {portfolio.views}</p>
             </div>
@@ -166,7 +168,7 @@ export default function PortfolioDetail() {
           <Comments portfolioId={id} />
         </div>
 
-        <div className='portDetailRight'>
+        <div className="portDetailRight">
           <h3>관련 채용공고</h3>
           {jobPostings.length === 0 ? (
             <p>관련 채용공고가 없습니다.</p>
@@ -180,3 +182,4 @@ export default function PortfolioDetail() {
     </>
   );
 }
+
