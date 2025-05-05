@@ -11,8 +11,8 @@ export default async function handler(req, res) {
     const queryString = new URLSearchParams(req.query).toString();
     const fullUrl = `${endpoint}?${queryString}`;
 
-    console.log('🔍 프록시 요청 URL:', fullUrl);
-    console.log('🔐 Authorization:', token);
+    console.log(' 프록시 요청 URL:', fullUrl);
+    console.log(' Authorization:', token);
 
     const response = await fetch(fullUrl, {
       method: 'GET',
